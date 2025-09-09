@@ -16,6 +16,7 @@
 
 // import Footer from "./Components/Footer";
 // import Header from "./Components/Header";
+import CatalogListing from "./Components/CatalogListing";
 import Home from "./Components/Home";
 
 
@@ -24,7 +25,6 @@ export default function Page() {
   <>
   
 <Home/>
-
     </>
   );
 }

@@ -1,6 +1,7 @@
 import Footer from "./Components/Footer";
 import Header from "./Components/Header";
 import "./globals.css";
+import { ToastContainer } from "react-toastify";
 
 export const metadata = {
   title: "MayBell-Online Furniture store",
@@ -11,7 +12,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
+      <ToastContainer />
         <Header />
+      
         {children}
         <Footer />
       </body>
