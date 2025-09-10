@@ -1,18 +1,31 @@
 "use client"
 
 import Link from 'next/link';
-import React, { use, useState } from 'react'
-
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
 export default function Header() {
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [desktopMenuOpen, setDesktopMenuOpen] = useState(false);
-  return (
-    <>
-<header
- class="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-5"
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [desktopMenuOpen, setDesktopMenuOpen] = useState(false);
+
+    const [getCategories, setGetCategories] = useState([])
+
+    useEffect(() => {
+        axios.get('https://wscubetech.co/ecommerce-api/categories.php')
+            .then((result) => {
+                setGetCategories(result.data.data)
+            })
+            .catch((error) => {
+                toast.error('Something went wrong !!');
+            })
+
+    })
+    return (
+        <>
+            <header
+                class="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-5"
             >
-                <a href="index.html">
+                <a href="/">
                     <img
                         className="cursor-pointer sm:h-auto sm:w-auto"
                         src="/images/company-logo.svg"
@@ -240,13 +253,13 @@ export default function Header() {
                     <p class="text-xs">Account</p>
                 </Link>
             </div> */}
-{/* 
+            {/* 
  mobile menu open */}
 
             <section
                 x-show="mobileMenuOpen" onClick={() => setMobileMenuOpen(false)}
 
-                className=   { (  mobileMenuOpen ?  'absolute left-0 right-0 z-50 h-screen w-full bg-white' :'absolute left-0 right-0 z-50 h-screen w-full bg-white hidden')}
+                className={(mobileMenuOpen ? 'absolute left-0 right-0 z-50 h-screen w-full bg-white max-h-96 overflow-y-auto' : 'absolute left-0 right-0 z-50 h-screen w-full bg-white max-h-32 overflow-y-auto hidden')}
 
             >
                 <div class="mx-auto">
@@ -364,10 +377,10 @@ export default function Header() {
             </section>
 
 
-{/* mobile menu close */}
+            {/* mobile menu close */}
 
 
-<nav className="relative bg-violet-900">
+            <nav className="relative bg-violet-900">
                 <div
                     className="mx-auto hidden h-12 w-full max-w-[1200px] items-center md:flex"
                 >
@@ -430,261 +443,133 @@ export default function Header() {
                     </div>
                 </div>
             </nav>
- {/* desktop menu open */}
+            {/* desktop menu open */}
 
- <section
+            <section
                 x-show="desktopMenuOpen" onClick={() => setDesktopMenuOpen(false)}
-                className=   { (  desktopMenuOpen ?  'absolute left-0 right-0 z-10 w-full border-b border-r border-l bg-white' :'absolute left-0 right-0 z-10 w-full border-b border-r border-l bg-white hidden')}
+                className={(desktopMenuOpen ? 'absolute left-0 right-0 z-10 w-full border-b border-r border-l bg-white max-h-80 overflow-y-auto' : 'absolute left-0 right-0 z-10 w-full border-b border-r border-l bg-white  overflow-y-auto max-h-80 hidden ')}
 
-         
-    >
-            <div className="mx-auto flex max-w-[1200px] py-10">
-                <div className="w-[300px] border-r">
-                    <ul className="px-5">
-                        <li
-                            className="active:blue-900 flex items-center gap-2 bg-amber-400 py-2 px-3 active:bg-amber-400"
-                        >
-                            <img
-                                width="15px"
-                                height="15px"
-                                src="/images/bed.svg"
-                                alt="Bedroom icon"
-                            />
-                            Bedroom
-                            <span className="ml-auto"
-                            ><svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                className="h-4 w-4"
-                            >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                                    />
-                                </svg>
-                            </span>
-                        </li>
 
-                        <li
-                            className="active:blue-900 flex items-center gap-2 py-2 px-3 hover:bg-neutral-100 active:bg-amber-400"
-                        >
-                            <img
-                                width="15px"
-                                height="15px"
-                                src="/images/sleep.svg"
-                                alt="bedroom icon"
-                            />
-                            Matrass
-                            <span className="ml-auto"
-                            ><svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                className="h-4 w-4"
-                            >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                                    />
-                                </svg>
-                            </span>
-                        </li>
+            >
+                <div className="mx-auto flex max-w-[1200px] py-10">
+                    <div className="w-[300px] border-r">
+                        <ul className="px-5">
 
-                        <li
-                            className="active:blue-900 flex items-center gap-2 py-2 px-3 hover:bg-neutral-100 active:bg-amber-400"
-                        >
-                            <img
-                                width="15px"
-                                height="15px"
-                                src="/images/outdoor.svg"
-                                alt="bedroom icon"
-                            />
-                            Outdoor
-                            <span className="ml-auto"
-                            ><svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                className="h-4 w-4"
-                            >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                                    />
-                                </svg>
-                            </span>
-                        </li>
 
-                        <li
-                            className="active:blue-900 flex items-center gap-2 py-2 px-3 hover:bg-neutral-100 active:bg-amber-400"
-                        >
-                            <img
-                                width="15px"
-                                height="15px"
-                                src="/images/sofa.svg"
-                                alt="bedroom icon"
-                            />
-                            Sofa
-                            <span className="ml-auto"
-                            ><svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                className="h-4 w-4"
-                            >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                                    />
-                                </svg>
-                            </span>
-                        </li>
+                            {getCategories.map((v, i) => {
+                                return (
 
-                        <li
-                            className="active:blue-900 flex items-center gap-2 py-2 px-3 hover:bg-neutral-100 active:bg-amber-400"
-                        >
-                            <img
-                                width="15px"
-                                height="15px"
-                                src="/images/kitchen.svg"
-                                alt="bedroom icon"
-                            />
-                            Kitchen
-                            <span className="ml-auto"
-                            ><svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                className="h-4 w-4"
-                            >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                                    />
-                                </svg>
-                            </span>
-                        </li>
+                                    <Link href ={`catalog/${v.slug}`}>
+                                    <li
+                                        className="active:blue-900 flex items-center gap-2 bg-slate-200 py-2 px-3 active:bg-amber-400"
+                                    >
+                                        <img
+                                            width="15px"
+                                            height="15px"
+                                            src="/images/bed.svg"
+                                            alt="Bedroom icon"
+                                        />
+                                        {v.name}
+                                        <span className="ml-auto"
+                                        ><svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            strokeWidth="1.5"
+                                            stroke="currentColor"
+                                            className="h-4 w-4"
+                                        >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                                                />
+                                            </svg>
+                                        </span>
+                                    </li>
+                                    </Link>
+                                )
+                            })}
 
-                        <li
-                            className="active:blue-900 flex items-center gap-2 py-2 px-3 hover:bg-neutral-100 active:bg-amber-400"
-                        >
-                            <img
-                                width="15px"
-                                height="15px"
-                                src="/images/food.svg"
-                                alt="Food icon"
-                            />
-                            Living room
-                            <span className="ml-auto"
-                            ><svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                className="h-4 w-4"
-                            >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                                    />
-                                </svg>
-                            </span>
-                        </li>
-                    </ul>
-                </div>
 
-                <div className="flex w-full justify-between">
-                    <div className="flex gap-6">
-                        <div className="mx-5">
-                            <p className="font-medium text-gray-500">BEDS</p>
-                            <ul className="text-sm leading-8">
-                                <li><a href="product-overview.html">Italian bed</a></li>
-                                <li><a href="product-overview.html">Queen-size bed</a></li>
-                                <li><a href="product-overview.html">Wooden craft bed</a></li>
-                                <li><a href="product-overview.html">King-size bed</a></li>
-                            </ul>
-                        </div>
 
-                        <div className="mx-5">
-                            <p className="font-medium text-gray-500">LAMPS</p>
-                            <ul className="text-sm leading-8">
-                                <li><a href="product-overview.html">Italian Purple Lamp</a></li>
-                                <li><a href="product-overview.html">APEX Lamp</a></li>
-                                <li><a href="product-overview.html">PIXAR lamp</a></li>
-                                <li><a href="product-overview.html">Ambient Nightlamp</a></li>
-                            </ul>
-                        </div>
+                        </ul>
+                    </div>
 
-                        <div className="mx-5">
-                            <p className="font-medium text-gray-500">BEDSIDE TABLES</p>
-                            <ul className="text-sm leading-8">
-                                <li><a href="product-overview.html">Purple Table</a></li>
-                                <li><a href="product-overview.html">Easy Bedside</a></li>
-                                <li><a href="product-overview.html">Soft Table</a></li>
-                                <li><a href="product-overview.html">Craft Table</a></li>
-                            </ul>
-                        </div>
+                    <div className="flex w-full justify-between">
+                        <div className="flex gap-6">
+                            <div className="mx-5">
+                                <p className="font-medium text-gray-500">BEDS</p>
+                                <ul className="text-sm leading-8">
+                                    <li><a href="product-overview.html">Italian bed</a></li>
+                                    <li><a href="product-overview.html">Queen-size bed</a></li>
+                                    <li><a href="product-overview.html">Wooden craft bed</a></li>
+                                    <li><a href="product-overview.html">King-size bed</a></li>
+                                </ul>
+                            </div>
 
-                        <div className="mx-5">
-                            <p className="font-medium text-gray-500">SPECIAL</p>
-                            <ul className="text-sm leading-8">
-                                <li><a href="product-overview.html">Humidifier</a></li>
-                                <li><a href="product-overview.html">Bed Cleaner</a></li>
-                                <li><a href="product-overview.html">Vacuum Cleaner</a></li>
-                                <li><a href="product-overview.html">Pillow</a></li>
-                            </ul>
+                            <div className="mx-5">
+                                <p className="font-medium text-gray-500">LAMPS</p>
+                                <ul className="text-sm leading-8">
+                                    <li><a href="product-overview.html">Italian Purple Lamp</a></li>
+                                    <li><a href="product-overview.html">APEX Lamp</a></li>
+                                    <li><a href="product-overview.html">PIXAR lamp</a></li>
+                                    <li><a href="product-overview.html">Ambient Nightlamp</a></li>
+                                </ul>
+                            </div>
+
+                            <div className="mx-5">
+                                <p className="font-medium text-gray-500">BEDSIDE TABLES</p>
+                                <ul className="text-sm leading-8">
+                                    <li><a href="product-overview.html">Purple Table</a></li>
+                                    <li><a href="product-overview.html">Easy Bedside</a></li>
+                                    <li><a href="product-overview.html">Soft Table</a></li>
+                                    <li><a href="product-overview.html">Craft Table</a></li>
+                                </ul>
+                            </div>
+
+                            <div className="mx-5">
+                                <p className="font-medium text-gray-500">SPECIAL</p>
+                                <ul className="text-sm leading-8">
+                                    <li><a href="product-overview.html">Humidifier</a></li>
+                                    <li><a href="product-overview.html">Bed Cleaner</a></li>
+                                    <li><a href="product-overview.html">Vacuum Cleaner</a></li>
+                                    <li><a href="product-overview.html">Pillow</a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </section >
+
+            {/* desktop menu close */}
+
+            <div className="relative">
+                <img
+                    className="w-full object-cover brightness-50 filter lg:h-[500px]"
+                    src="/images/header-bg.jpeg"
+                    alt="Living room image"
+                />
+
+                <div
+                    className="absolute top-1/2 left-1/2 mx-auto flex w-11/12 max-w-[1200px] -translate-x-1/2 -translate-y-1/2 flex-col text-center text-white lg:ml-5"
+                >
+                    <h1 className="text-4xl font-bold sm:text-5xl lg:text-left">
+                        Best Collection for Home decoration
+                    </h1>
+                    <p className="pt-3 text-xs lg:w-3/5 lg:pt-5 lg:text-left lg:text-base">
+                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequatur
+                        aperiam natus, nulla, obcaecati nesciunt, itaque adipisci earum
+                        ducimus pariatur eaque labore.
+                    </p>
+                    <button
+                        className="mx-auto mt-5 w-1/2 bg-amber-400 px-3 py-1 text-black duration-100 hover:bg-yellow-300 lg:mx-0 lg:h-10 lg:w-2/12 lg:px-10"
+                    >
+                        Order Now
+                    </button>
+                </div>
             </div>
-        </section >
 
-        {/* desktop menu close */}
-
-        <div className="relative">
-        <img
-          className="w-full object-cover brightness-50 filter lg:h-[500px]"
-          src="/images/header-bg.jpeg"
-          alt="Living room image"
-        />
-
-        <div
-          className="absolute top-1/2 left-1/2 mx-auto flex w-11/12 max-w-[1200px] -translate-x-1/2 -translate-y-1/2 flex-col text-center text-white lg:ml-5"
-        >
-          <h1 className="text-4xl font-bold sm:text-5xl lg:text-left">
-            Best Collection for Home decoration
-          </h1>
-          <p className="pt-3 text-xs lg:w-3/5 lg:pt-5 lg:text-left lg:text-base">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequatur
-            aperiam natus, nulla, obcaecati nesciunt, itaque adipisci earum
-            ducimus pariatur eaque labore.
-          </p>
-          <button
-            className="mx-auto mt-5 w-1/2 bg-amber-400 px-3 py-1 text-black duration-100 hover:bg-yellow-300 lg:mx-0 lg:h-10 lg:w-2/12 lg:px-10"
-          >
-            Order Now
-          </button>
-        </div>
-      </div>
-
-    </>
-  )
+        </>
+    )
 }
