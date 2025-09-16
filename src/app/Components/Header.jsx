@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
+import { toast } from 'react-toastify';
 export default function Header() {
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -19,7 +20,7 @@ export default function Header() {
                 toast.error('Something went wrong !!');
             })
 
-    })
+    }, [])
     return (
         <>
             <header
@@ -459,7 +460,7 @@ export default function Header() {
                             {getCategories.map((v, i) => {
                                 return (
 
-                                    <Link href ={`catalog/${v.slug}`}>
+                                    <Link href ={`catalog/${v.slug}`} key ={i}>
                                     <li
                                         className="active:blue-900 flex items-center gap-2 bg-slate-200 py-2 px-3 active:bg-amber-400"
                                     >

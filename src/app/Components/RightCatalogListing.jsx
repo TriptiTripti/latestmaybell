@@ -1,24 +1,30 @@
-import React, { useState,useEffect } from 'react'
+
 import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify';
 import ProductCard from './ProductCard';
 
-export default function RightCatalogListing() {
+export default function RightSideCatalog({filterCategories}) {
+   
     const [getProducts, setGetProducts] = useState([]);
-
+    console.log(getProducts,'getProducts');
     useEffect(() => {
         axios.get('https://wscubetech.co/ecommerce-api/products.php', {
+            
             params: {
-                categories : 'furniture,home-decoration',
-                limit: 20
+                categories : filterCategories.toString()
+                
             }
         })
         .then((result) => {
+           
             setGetProducts(result.data.data)
+            console.log(result.data.data,'res');
         })
         .catch(() => {
             toast.error('Something went wrong !!');
         })
-    })
+    },[filterCategories])
     return (
         <>
             <div>
@@ -105,13 +111,16 @@ export default function RightCatalogListing() {
                 >
                     {
                         getProducts.map((v, i) => {
+
+                           
                             return (
                                 <ProductCard key={i} product={v} />
+
                             )
                         })
                     }
                 </section>
             </div>
-    </>
-  )
+        </>
+    )
 }
