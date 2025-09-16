@@ -27,7 +27,7 @@ export default function RightSideCatalog({filterCategories}) {
     },[filterCategories])
     return (
         <>
-            <div>
+            <div class="w-full">
                 <div class="mb-5 flex items-center justify-between px-5">
                     <div class="flex gap-3">
                         <button class="flex items-center justify-center border px-6 py-2">
@@ -109,6 +109,13 @@ export default function RightSideCatalog({filterCategories}) {
                 <section
                     class="mx-auto grid max-w-[1200px] grid-cols-2 gap-3 px-5 pb-10 lg:grid-cols-3"
                 >
+
+{
+
+}
+
+
+
                     {
                         getProducts.map((v, i) => {
 

@@ -1,28 +1,31 @@
 'use client';
-import React, { useEffect, useState } from 'react'
-import LeftSideCatalog from './LeftCatalogListing';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import RightSideCatalog from './RightCatalogListing';
 import ProductCard from './ProductCard';
+import ProductLoading from './ProductLoading';
+import { Pagination } from "flowbite-react";
 
 
 export default function CatalogListing() {
-
     const [categories, setCategories] = useState([]);
     const [brands, setBrands] = useState([]);
     const [getProducts, setGetProducts] = useState([]);
+    const [isProductLoading, setIsProductLoading] = useState(true);
 
+    const [currentPage, setCurrentPage] = useState(1);
+
+  const onPageChange = (page) => setCurrentPage(page);
     useEffect(() => {
         axios.get('https://wscubetech.co/ecommerce-api/categories.php')
             .then((response) => {
                 setCategories(response.data.data);
             })
             .catch((error) => {
-                toast.error('Something went wrong.')
+                toast.error('Something went wrong.');
             });
-    }, [])
+    }, []);
 
     useEffect(() => {
         axios.get('https://wscubetech.co/ecommerce-api/brands.php')
@@ -30,24 +33,24 @@ export default function CatalogListing() {
                 setBrands(response.data.data);
             })
             .catch((error) => {
-                toast.error('Something went wrong.')
+                toast.error('Something went wrong.');
             });
-    }, [])
+    }, []);
 
     const params = useParams();
 
     const [filterCategories, setFilterCategories] = useState((params.slug?.filter(Boolean).slice(-1) || []));
-    
     const [filterBrands, setFilterBrands] = useState([]);
 
     useEffect(() => {
         setFilterCategories(params.slug?.filter(Boolean).slice(-1) || []);
-    }, [params.slug])
+    }, [params.slug]);
 
     useEffect(() => {
+        setIsProductLoading(true); // Show loading spinner before fetching
         axios.get('https://wscubetech.co/ecommerce-api/products.php', {
             params: {
-                page: '',
+                page: 1,
                 limit: 15,
                 sorting: '',
                 name: '',
@@ -61,57 +64,45 @@ export default function CatalogListing() {
             }
         })
         .then((result) => {
-          // console.log(result.data,'res');
-            // setIsProductLoading(false)
-            setGetProducts(result.data.data)
-            setTotalPages(result.data.toal_pages)
+            setGetProducts(result.data.data);
+            setIsProductLoading(false); // Hide loading spinner after fetching
         })
         .catch(() => {
             toast.error('Something went wrong !!');
-        })
-    }, [filterCategories, filterBrands])
+        });
+    }, [filterCategories, filterBrands]);
 
     const filterCategory = (slug) => {
-        // setIsProductLoading(true);
-       
+        setIsProductLoading(true); // Show loading spinner when a category is selected
+
         if (filterCategories.includes(slug)) {
-            const data = filterCategories.filter((v, i) => {
-                if (v != slug) {
-                    return v;
-                }
-            })
-            setFilterCategories([...data])
+            const data = filterCategories.filter((v) => v !== slug);
+            setFilterCategories([...data]);
         } else {
-            setFilterCategories([...filterCategories, slug])
+            setFilterCategories([...filterCategories, slug]);
         }
-    }
+    };
 
     const filterBrand = (slug) => {
-        // setCurrentPage(1)
-        // setIsProductLoading(true);
         if (filterBrands.includes(slug)) {
-            const data = filterBrands.filter((v, i) => {
-                if (v != slug) {
-                    return v;
-                }
-            })
-            setFilterBrands([...data])
+            const data = filterBrands.filter((v) => v !== slug);
+            setFilterBrands([...data]);
         } else {
-            setFilterBrands([...filterBrands, slug])
+            setFilterBrands([...filterBrands, slug]);
         }
-    }
+    };
 
     return (
         <>
-            <nav class="mx-auto w-full mt-4 max-w-[1200px] px-5">
-                <ul class="flex items-center">
-                    <li class="cursor-pointer">
+            <nav className="mx-auto w-full mt-4 max-w-[1200px] px-5">
+                <ul className="flex items-center">
+                    <li className="cursor-pointer">
                         <a href="index.html">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24"
                                 fill="currentColor"
-                                class="h-5 w-5"
+                                className="h-5 w-5"
                             >
                                 <path
                                     d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z"
@@ -123,153 +114,68 @@ export default function CatalogListing() {
                         </a>
                     </li>
                     <li>
-                        <span class="mx-2 text-gray-500">&gt;</span>
+                        <span className="mx-2 text-gray-500">&gt;</span>
                     </li>
-
-                    <li class="text-gray-500">Catalog</li>
+                    <li className="text-gray-500">Catalog</li>
                 </ul>
             </nav>
 
-            <section
-                class="container mx-auto flex-grow max-w-[1200px] border-b py-5 lg:flex lg:flex-row lg:py-10"
-            >
-                <section class="hidden w-[300px] flex-shrink-0 px-4 lg:block">
-                    <div class="flex border-b pb-5">
-                        <div class="w-full">
-                            <p class="mb-3 font-medium">CATEGORIES</p>
-
+            <section className="container mx-auto flex-grow max-w-[1200px] border-b py-5 lg:flex lg:flex-row lg:py-10">
+                <section className="hidden w-[300px] flex-shrink-0 px-4 lg:block">
+                    <div className="flex border-b pb-5">
+                        <div className="w-full">
+                            <p className="mb-3 font-medium">CATEGORIES</p>
                             {
                                 categories.map((v, i) => {
                                     return (
-                                        <div class="flex w-full justify-between" key={i}>
-                                            <div class="flex justify-center items-center">
-                                                <input type="checkbox" onClick={() => filterCategory(v.slug)} id={v.slug} checked={ (filterCategories.includes(v.slug)) ? 'checked' : '' } />
-                                                <label class="ml-4" htmlFor={v.slug}>{v.name}</label>
+                                        <div className="flex w-full justify-between" key={i}>
+                                            <div className="flex justify-center items-center">
+                                                <input
+                                                    type="checkbox"
+                                                    onClick={() => filterCategory(v.slug)}
+                                                    id={v.slug}
+                                                    checked={filterCategories.includes(v.slug)}
+                                                />
+                                                <label className="ml-4" htmlFor={v.slug}>{v.name}</label>
                                             </div>
                                         </div>
-                                    )
+                                    );
                                 })
                             }
-
-
-
-                        </div>
-                    </div>
-
-                    <div class="flex border-b py-5">
-                        <div class="w-full">
-                            <p class="mb-3 font-medium">BRANDS</p>
-
-                            {
-                                brands.map((v, i) => {
-                                    return (
-                                        <div class="flex w-full justify-between" key={i}>
-                                            <div class="flex justify-center items-center">
-                                                <input type="checkbox" onClick={() => filterBrand(v.slug)} id={v.slug} checked={ (filterBrands.includes(v.slug)) ? 'checked' : '' } />
-                                                <label class="ml-4" htmlFor={v.slug}>{v.name}</label>
-                                            </div>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                    </div>
-
-                    <div class="flex border-b py-5">
-                        <div class="w-full">
-                            <p class="mb-3 font-medium">PRICE</p>
-
-                            <div class="flex w-full">
-                                <div class="flex justify-between">
-                                    <input
-                                        x-mask="99999"
-                                        min="50"
-                                        type="number"
-                                        class="h-8 w-[90px] border pl-2"
-                                        placeholder="50"
-                                    />
-                                    <span class="px-3">-</span>
-                                    <input
-                                        x-mask="999999"
-                                        type="number"
-                                        max="999999"
-                                        class="h-8 w-[90px] border pl-2"
-                                        placeholder="99999"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex border-b py-5">
-                        <div class="w-full">
-                            <p class="mb-3 font-medium">SIZE</p>
-
-                            <div class="flex gap-2">
-                                <div
-                                    class="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
-                                >
-                                    XS
-                                </div>
-                                <div
-                                    class="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
-                                >
-                                    S
-                                </div>
-                                <div
-                                    class="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
-                                >
-                                    M
-                                </div>
-
-                                <div
-                                    class="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
-                                >
-                                    L
-                                </div>
-
-                                <div
-                                    class="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
-                                >
-                                    XL
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex py-5">
-                        <div class="w-full">
-                            <p class="mb-3 font-medium">COLOR</p>
-
-                            <div class="flex gap-2">
-                                <div
-                                    class="h-8 w-8 cursor-pointer border border-white bg-gray-600 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
-                                ></div>
-                                <div
-                                    class="h-8 w-8 cursor-pointer border border-white bg-violet-900 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
-                                ></div>
-                                <div
-                                    class="h-8 w-8 cursor-pointer border border-white bg-red-900 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
-                                ></div>
-                            </div>
                         </div>
                     </div>
                 </section>
 
-                <div className='w-full'>
-                  
-
-                       <section
-        class="container mx-auto flex-grow max-w-[1200px] border-b py-5 lg:flex lg:flex-row lg:py-10"
-                    >
-                       <RightSideCatalog filterCategories={filterCategories} />
-                        
-                    </section>
+                <section className=" w-full h-full mx-auto grid max-w-[1200px] grid-cols-2 gap-3 px-5 pb-10 lg:grid-cols-3">
+                    {
+                        isProductLoading
+                            ? (
+                                <>
+                                    <ProductLoading />
+                                    <ProductLoading />
+                                    <ProductLoading />
+                                    <ProductLoading />
+                                    <ProductLoading />
+                                    <ProductLoading />
+                                    <ProductLoading />
+                                    <ProductLoading />
+                                    <ProductLoading />
+                                    <ProductLoading />
+                                    <ProductLoading />
+                                    <ProductLoading />
+                                </>
+                            )
+                            : getProducts.map((v, i) => (
+                                <ProductCard key={i} product={v} />
+                            ))
+                    }
 
                     
-                </div>
-
+                </section>
+                <div className="flex overflow-x-auto sm:justify-center">
+      <Pagination currentPage={currentPage} totalPages={100} onPageChange={onPageChange} />
+    </div>
             </section>
         </>
-    )
+    );
 }
