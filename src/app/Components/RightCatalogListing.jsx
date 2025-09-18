@@ -27,7 +27,7 @@ export default function RightSideCatalog({filterCategories}) {
     },[filterCategories])
     return (
         <>
-            <div class="w-full">
+            {/* <div class="w-full">
                 <div class="mb-5 flex items-center justify-between px-5">
                     <div class="flex gap-3">
                         <button class="flex items-center justify-center border px-6 py-2">
@@ -127,7 +127,7 @@ export default function RightSideCatalog({filterCategories}) {
                         })
                     }
                 </section>
-            </div>
+            </div> */}
         </>
     )
 }
