@@ -4,6 +4,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 export default function Header() {
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -21,6 +22,11 @@ export default function Header() {
             })
 
     }, [])
+
+
+
+
+    const allcartItems = useSelector((state) => state.allCartValues.cartItems)
     return (
         <>
             <header
@@ -119,7 +125,7 @@ export default function Header() {
                             />
                         </svg>
 
-                        <p class="text-xs">Cart</p>
+                        <p class="text-xs">Cart {allcartItems.length}</p>
                     </Link>
 
                     <Link
@@ -304,7 +310,8 @@ export default function Header() {
                                 />
                             </svg>
 
-                            <p class="text-xs">Cart</p>
+                            <p class="text-xs">Cart 
+                            </p>
                         </Link>
 
                         <Link
