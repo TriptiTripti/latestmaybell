@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { deleteCart, updateCart } from '../ReduxToolkit/CartSlice';
 
 export default function ViewCart() {
 
@@ -334,7 +335,9 @@ export default function ViewCart() {
                                             </td>
                                             <td class="mx-auto text-center">&#36;{v.price}</td>
                                             <td class="align-middle">
+                                        
                                                 <div class="flex items-center justify-center">
+                                                    
                                                     <button onClick={ () => dispatch(updateCart({ id : v.id, type: 'minus', stock: v.stock})) }
                                                         class="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
                                                     >
@@ -345,6 +348,7 @@ export default function ViewCart() {
                                                     >
                                                         {v.quantity}
                                                     </div>
+
                                                     <button onClick={ () => dispatch(updateCart({ id : v.id, type: 'plus', stock: v.stock})) }
                                                         class="flex h-8 w-8 cursor-pointer items-center justify-center border duration-100 hover:bg-neutral-100 focus:ring-2 focus:ring-gray-500 active:ring-2 active:ring-gray-500"
                                                     >

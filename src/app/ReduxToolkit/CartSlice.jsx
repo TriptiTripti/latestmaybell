@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { toast } from 'react-toastify';
+import { toast } from 'react-toastify'
 
 var getCartData = JSON.parse(localStorage.getItem('cartItems'));
 var getCartData = getCartData ? getCartData : [];
@@ -55,69 +55,67 @@ export const cartSlice = createSlice({
         })
       }
     },
+    deleteCart: (state, action) => {
+      if (confirm('Are you sure want to delete ?')) {
 
-    // deleteCart: (state, action) => {
-    //   if (confirm('Are you sure want to delete ?')) {
+        var cartData = state.cartItems.filter((v) => {
+          if (v.id != action.payload) {
+            return v;
+          }
+        })
 
-    //     var cartData = state.cartItems.filter((v) => {
-    //       if (v.id != action.payload) {
-    //         return v;
-    //       }
-    //     })
+        var finalData = [...cartData];
 
-    //     var finalData = [...cartData];
+        state.cartItems = finalData;
+        localStorage.setItem('cartItems', JSON.stringify(finalData));
+        toast.success('Delete cart successfully.', {
+          autoClose: 1000,
+        })
+      }
+    },
+    updateCart: (state, action) => {
+      if (action.payload.type == 'minus') {
+        const cartData = state.cartItems.map((v, i) => {
+          if (v.id == action.payload.id) {
+            if (v.quantity > 1) {
+              v.quantity--;
 
-    //     state.cartItems = finalData;
-    //     localStorage.setItem('cartItems', JSON.stringify(finalData));
-    //     toast.success('Delete cart successfully.', {
-    //       autoClose: 1000,
-    //     })
-    //   }
-    // },
+              return v;
+            } else {
+              return v;
+            }
+          } else {
+            return v;
+          }
+        })
 
-    // updateCart: (state, action) => {
-    //   if (action.payload.type == 'minus') {
-    //     const cartData = state.cartItems.map((v, i) => {
-    //       if (v.id == action.payload.id) {
-    //         if (v.quantity > 1) {
-    //           v.quantity--;
+        state.cartItems = cartData;
+        localStorage.setItem('cartItems', JSON.stringify(cartData));
+      } else {
+        console.log(action.payload.stock)
+        const cartData = state.cartItems.map((v, i) => {
+          if (v.id == action.payload.id) {
+            if (v.quantity < 5) {
+              v.quantity++;
 
-    //           return v;
-    //         } else {
-    //           return v;
-    //         }
-    //       } else {
-    //         return v;
-    //       }
-    //     })
+              return v;
+            } else {
+              toast.error('maximun Quantity Reached')
+              return v;
+            }
+          } else {
+            return v;
+          }
+        })
 
-    //     state.cartItems = cartData;
-    //     localStorage.setItem('cartItems', JSON.stringify(cartData));
-    //   } else {
-    //     console.log(action.payload.stock)
-    //     const cartData = state.cartItems.map((v, i) => {
-    //       if (v.id == action.payload.id) {
-    //         if (v.quantity < 5) {
-    //           v.quantity++;
-
-    //           return v;
-    //         } else {
-    //           toast.error('maximun Quantity Reached')
-    //           return v;
-    //         }
-    //       } else {
-    //         return v;
-    //       }
-    //     })
-
-    //     state.cartItems = cartData;
-    //     localStorage.setItem('cartItems', JSON.stringify(cartData));
-    //   }
-    // },
+        state.cartItems = cartData;
+        localStorage.setItem('cartItems', JSON.stringify(cartData));
+      }
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addToCart} = cartSlice.actions
+export const { addToCart,deleteCart,updateCart} = cartSlice.actions
 
 export default cartSlice.reducer
