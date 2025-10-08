@@ -109,7 +109,7 @@ export default function Header() {
                     </Link>
 
                     <Link
-                        href="/cart"
+                        href="/view-cart"
                         class="flex cursor-pointer flex-col items-center justify-center"
                     >
                         <svg
@@ -294,7 +294,7 @@ export default function Header() {
                         </Link>
 
                         <Link
-                            href="/cart"
+                            href="/view-cart"
                             class="flex cursor-pointer flex-col items-center justify-center"
                         >
                             <svg

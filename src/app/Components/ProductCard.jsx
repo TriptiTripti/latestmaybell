@@ -1,7 +1,13 @@
 import Link from 'next/link'
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { addToCart } from '../ReduxToolkit/CartSlice'
+
 
 export default function ProductCard({product}) {
+
+
+  const dispatch=useDispatch()
   return (
   <>
     <div className="flex flex-col">
@@ -133,7 +139,7 @@ export default function ProductCard({product}) {
             </div>
 
             <div>
-              <button className="my-5 h-10 w-full bg-violet-900 text-white">
+              <button  onClick={()=>dispatch(addToCart(product))} className="my-5 h-10 w-full bg-violet-900 text-white">
                 Add to cart
               </button>
             </div>
